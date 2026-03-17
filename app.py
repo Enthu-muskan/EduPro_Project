@@ -6,58 +6,72 @@ st.set_page_config(page_title="EduPro Dashboard", layout="wide")
 st.title("📊 EduPro Instructor Performance Dashboard")
 
 # -----------------------------
-# FILE UPLOAD (IMPORTANT FIX)
+# DEFAULT DATA (AUTO LOAD)
 # -----------------------------
-uploaded_file = st.file_uploader("📂 Upload your Excel file", type=["xlsx"])
 
-if uploaded_file is not None:
-    
-    # Read Excel file
-    xls = pd.ExcelFile(uploaded_file)
+teachers = pd.DataFrame({
+    "TeacherID": [1,2,3,4,5,6,7],
+    "TeacherName": ["Amit","Riya","Rahul","Neha","Karan","Pooja","Arjun"],
+    "Age": [35,29,40,32,45,30,38],
+    "Gender": ["Male","Female","Male","Female","Male","Female","Male"],
+    "Expertise": ["Data Science","AI","Web Dev","ML","Cloud","AI","Data Science"],
+    "YearsOfExperience": [10,5,15,8,20,6,12],
+    "TeacherRating": [4.5,4.2,4.8,4.3,4.7,4.4,4.6]
+})
 
-    st.write("📄 Available Sheets:", xls.sheet_names)
+courses = pd.DataFrame({
+    "CourseID": [101,102,103,104,105,106,107],
+    "CourseName": ["Python Basics","AI Intro","Web Dev Advanced","ML Course","Cloud Basics","Deep Learning","Data Analysis"],
+    "CourseCategory": ["Programming","AI","Programming","AI","Cloud","AI","Data Science"],
+    "CourseLevel": ["Beginner","Intermediate","Advanced","Advanced","Beginner","Advanced","Intermediate"],
+    "CourseRating": [4.3,4.5,4.6,4.4,4.2,4.7,4.5]
+})
 
-    # Read sheets (make sure names match)
-    teachers = pd.read_excel(xls, sheet_name=xls.sheet_names[0])
-    courses = pd.read_excel(xls, sheet_name=xls.sheet_names[1])
-    transactions = pd.read_excel(xls, sheet_name=xls.sheet_names[2])
+transactions = pd.DataFrame({
+    "TransactionID": [1,2,3,4,5,6,7],
+    "CourseID": [101,102,103,104,105,106,107],
+    "TeacherID": [1,2,3,4,5,6,7]
+})
 
-    # Merge data
-    df = transactions.merge(teachers, on="TeacherID")
-    df = df.merge(courses, on="CourseID")
+# -----------------------------
+# MERGE DATA
+# -----------------------------
+df = transactions.merge(teachers, on="TeacherID")
+df = df.merge(courses, on="CourseID")
 
-    # -----------------------------
-    # DASHBOARD
-    # -----------------------------
+# -----------------------------
+# DASHBOARD
+# -----------------------------
 
-    st.subheader("📊 Full Dataset")
-    st.dataframe(df, use_container_width=True)
+# KPIs
+st.subheader("📈 Key Performance Indicators")
 
-    # KPIs
-    st.subheader("📈 Key Metrics")
-    col1, col2 = st.columns(2)
-    col1.metric("Average Teacher Rating", round(df['TeacherRating'].mean(),2))
-    col2.metric("Average Course Rating", round(df['CourseRating'].mean(),2))
+col1, col2 = st.columns(2)
+col1.metric("Average Teacher Rating", round(df['TeacherRating'].mean(),2))
+col2.metric("Average Course Rating", round(df['CourseRating'].mean(),2))
 
-    # Scatter
-    st.subheader("📌 Experience vs Teacher Rating")
-    st.scatter_chart(df[['YearsOfExperience','TeacherRating']])
+# Dataset
+st.subheader("📊 Full Dataset")
+st.dataframe(df, use_container_width=True)
 
-    # Category
-    st.subheader("📊 Course Category Performance")
-    category_avg = df.groupby("CourseCategory")["CourseRating"].mean()
-    st.bar_chart(category_avg)
+# Scatter
+st.subheader("📌 Experience vs Teacher Rating")
+st.scatter_chart(df[['YearsOfExperience','TeacherRating']])
 
-    # Top instructors
-    st.subheader("🏆 Top Instructors")
-    top = df.sort_values(by="TeacherRating", ascending=False)
-    st.dataframe(top[['TeacherName','TeacherRating','Expertise']], use_container_width=True)
+# Category chart
+st.subheader("📊 Course Category Performance")
+category_avg = df.groupby("CourseCategory")["CourseRating"].mean()
+st.bar_chart(category_avg)
 
-    # Filter
-    st.subheader("🔍 Filter by Course Category")
-    category = st.selectbox("Select Category", df['CourseCategory'].unique())
-    filtered = df[df['CourseCategory']==category]
-    st.dataframe(filtered, use_container_width=True)
+# Top instructors
+st.subheader("🏆 Top Instructors")
+top = df.sort_values(by="TeacherRating", ascending=False)
+st.dataframe(top[['TeacherName','TeacherRating','Expertise']], use_container_width=True)
 
-else:
-    st.warning("⚠️ Please upload your Excel dataset to proceed.")
+# Filter
+st.subheader("🔍 Filter by Course Category")
+category = st.selectbox("Select Category", df['CourseCategory'].unique())
+filtered = df[df['CourseCategory']==category]
+st.dataframe(filtered, use_container_width=True)
+
+st.success("✅ Project Running Successfully Without Dataset Upload!")
