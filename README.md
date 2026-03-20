@@ -1,47 +1,29 @@
-# EduPro_Project
-# 📊 EduPro Instructor Performance & Course Quality Evaluation
+# 🎓 EduPro Advanced User Analytics & ML Project
 
-## 📌 Project Overview
-This project analyzes instructor performance and course quality using data analytics and visualization.
+## 📌 Objective
 
-## 🎯 Objectives
-- Evaluate instructor effectiveness
-- Analyze course quality
-- Study impact of experience on ratings
+Analyze user demographics and predict user category using Machine Learning.
 
-## 🛠️ Technologies Used
-- Python
-- Pandas
-- Streamlit
+## 🤖 ML Model
+
+* Algorithm: Random Forest
+* Target: User Category (Young, Adult, Senior)
 
 ## 📊 Features
-- Instructor dashboard
-- Experience vs rating analysis
-- Course category insights
-- Top instructor leaderboard
 
-## 🚀 How to Run
-pip install -r requirements.txt  
+* Interactive dashboard (Streamlit)
+* Filters (Age, Gender)
+* Plotly visualizations
+* Real-time ML prediction
+
+## 🚀 Run Project
+
+pip install -r requirements.txt
+python model.py
 streamlit run app.py
 
-## 🌐 Live Demo
-(Add your deployed link here)
+## 📈 Outcome
 
-## 📄 Research Paper
-(Add your Google Drive link here)
-
-## 🎥 Project Video
-(Add your YouTube link here)
-
-## 📈 Key Insights
-- Experienced instructors tend to have higher ratings  
-- Instructor quality impacts course ratings  
-- AI and Data Science courses perform well  
-
-## 📌 Conclusion
-Instructor performance plays a key role in course success.
-
----
-
-### 👩‍💻 Developed by:
-Muskan Pandey
+* Identified user segments
+* Built prediction model
+* Created interactive dashboard
